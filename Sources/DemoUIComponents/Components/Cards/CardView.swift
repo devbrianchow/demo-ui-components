@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CardView: View {
+public struct CardView: View {
     private var imageUrlString: String
     private var imageUrl: URL? {
         URL(string: imageUrlString)
@@ -17,7 +17,7 @@ struct CardView: View {
     private var cardHeight: CGFloat = 225
     private var cornerRadius: CGFloat = 12
     
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 0) {
             AsyncImageCardView(url: imageUrl, cardHeight: cardHeight)
             
@@ -39,7 +39,7 @@ struct CardView: View {
         .shadow(color: Color.black.opacity(0.05), radius: cornerRadius/3, x: 0, y: 2)
     }
     
-    init(imageUrlString: String, cardTitle: String, cardSubTitle: String) {
+    public init(imageUrlString: String, cardTitle: String, cardSubTitle: String) {
         self.imageUrlString = imageUrlString
         self.cardTitle = cardTitle
         self.cardSubTitle = cardSubTitle

@@ -7,29 +7,28 @@
 
 import SwiftUI
 
-struct TabItemData: Identifiable {
-    let id = UUID()
+public struct TabItemData {
     let view: AnyView
     let iconName: String
     let title: String
     
-    init<V: View>(view: V, iconName: String, title: String) {
+    public init<V: View>(view: V, iconName: String, title: String) {
         self.view = AnyView(view)
         self.iconName = iconName
         self.title = title
     }
 }
 
-struct TabBar: View {
+public struct TabBar: View {
     private let tabs: [TabItemData]
     
-    @State private var selectedTabId: UUID
+    @Binding private var selectedIndex: Int
 
-    var body: some View {
-        TabView(selection: $selectedTabId) {
-            ForEach(tabs) { tab in
+    public var body: some View {
+        TabView(selection: $selectedIndex) {
+            ForEach(Array(tabs.enumerated()), id: \.offset) { index, tab in
                 tab.view
-                    .tag(tab.id)
+                    .tag(index)
                     .tabItem {
                         Image(systemName: tab.iconName)
                         Text(tab.title)
@@ -38,31 +37,43 @@ struct TabBar: View {
         }
     }
     
-    init(tabs: [TabItemData], initialTabId: UUID? = nil) {
+    public init(tabs: [TabItemData], selectedIndex: Binding<Int>) {
         self.tabs = tabs
-        _selectedTabId = State(initialValue: initialTabId ?? tabs.first!.id)
+        self._selectedIndex = selectedIndex
     }
 }
 
 #if DEBUG
-struct TabView_Preview: PreviewProvider {
-    static var previews: some View {
-        let tabs: [TabItemData] = [
-            TabItemData(view: FirstView(), iconName: "square.grid.2x2", title: "Peliculas"),
-            TabItemData(view: SecondView(), iconName: "star", title: "Favoritos")
-        ]
-        TabBar(tabs: tabs)
-    }
-}
-struct FirstView: View {
-    var body: some View {
-        Text("FirstView")
-    }
-}
+struct TabView_Previews: PreviewProvider {
+    struct PreviewWrapper: View {
+        @State private var selectedIndex: Int = 0
 
-struct SecondView: View {
-    var body: some View {
-        Text("SecondView")
+        var body: some View {
+            let tabs = [
+                TabItemData(view: FirstView(), iconName: "film", title: "Películas"),
+                TabItemData(view: SecondView(), iconName: "star", title: "Favoritos")
+            ]
+
+            VStack {
+                TabBar(tabs: tabs, selectedIndex: $selectedIndex)
+            }
+        }
+    }
+
+    static var previews: some View {
+        PreviewWrapper()
+    }
+
+    struct FirstView: View {
+        var body: some View {
+            Text("Películas")
+        }
+    }
+
+    struct SecondView: View {
+        var body: some View {
+            Text("Favoritos")
+        }
     }
 }
 #endif
