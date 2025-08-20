@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GenericScroll<Item: Identifiable, ContentView: View>: View {
+public struct GenericScroll<Item: Identifiable, ContentView: View>: View {
     
     private let columns = [GridItem(.flexible(), spacing: 0)]
     
@@ -19,12 +19,12 @@ struct GenericScroll<Item: Identifiable, ContentView: View>: View {
     private var loadingView: (() -> AnyView)?
     private var isRefreshable: (() -> Void)?
     
-    init(status: GenericScrollStatus<Item>, contentView: @escaping (Item) -> ContentView) {
+    public init(status: GenericScrollStatus<Item>, contentView: @escaping (Item) -> ContentView) {
         self.status = status
         self.contentView = contentView
     }
     
-    var body: some View {
+    public var body: some View {
         GeometryReader { proxy in
             ScrollView(showsIndicators: false) {
                 Group {
@@ -53,25 +53,25 @@ struct GenericScroll<Item: Identifiable, ContentView: View>: View {
         }
     }
     
-    func emptyView(_ value: @escaping (String) -> some View) -> Self {
+    public func emptyView(_ value: @escaping (String) -> some View) -> Self {
         var view = self
         view.emptyView = { AnyView(value($0)) }
         return view
     }
     
-    func errorView(_ value: @escaping (String) -> some View) -> Self {
+    public func errorView(_ value: @escaping (String) -> some View) -> Self {
         var view = self
         view.errorView = { AnyView(value($0)) }
         return view
     }
     
-    func loadingView(_ value: @escaping () -> some View) -> Self {
+    public func loadingView(_ value: @escaping () -> some View) -> Self {
         var view = self
         view.loadingView = { AnyView(value()) }
         return view
     }
     
-    func isRefreshable(_ value: (() -> Void)?) -> Self {
+    public func isRefreshable(_ value: (() -> Void)?) -> Self {
         var view = self
         view.isRefreshable = value
         return view
@@ -89,13 +89,13 @@ fileprivate extension View {
     }
 }
 
-enum GenericScrollStatus<Item: Identifiable>: Equatable {
+public enum GenericScrollStatus<Item: Identifiable>: Equatable {
     case loading
     case empty(message: String)
     case error(message: String)
     case data(item: Item)
     
-    static func == (lhs: Self, rhs: Self) -> Bool {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
         case (.loading, .loading),
              (.empty, .empty),

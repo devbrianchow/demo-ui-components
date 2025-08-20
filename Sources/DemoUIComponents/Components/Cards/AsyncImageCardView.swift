@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct AsyncImageCardView: View {
+public struct AsyncImageCardView: View {
     let url: URL?
-    private var imageWidth: CGFloat { 150 }
     let cardHeight: CGFloat
+    let imageWidth: CGFloat = 150
 
-    var body: some View {
+    public var body: some View {
         Group {
             if let url {
                 imageFromURL(url)
@@ -56,6 +56,11 @@ struct AsyncImageCardView: View {
             .foregroundColor(.gray)
             .background(Color.gray.opacity(0.2))
     }
+    
+    public init(url: URL?, cardHeight: CGFloat) {
+        self.url = url
+        self.cardHeight = cardHeight
+    }
 }
 
 #if DEBUG
@@ -63,7 +68,8 @@ struct AsyncImageCardView_Preview: PreviewProvider {
     static var previews: some View {
         AsyncImageCardView(
             url: URL(string: "https://image.tmdb.org/t/p/w220_and_h330_face/wCJSNZcLT7EuKKW35my9VLmrkR7.jpg"),
-                           cardHeight: 225)
+            cardHeight: 225)
     }
 }
 #endif
+

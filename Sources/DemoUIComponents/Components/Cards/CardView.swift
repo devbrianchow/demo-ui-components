@@ -14,6 +14,7 @@ public struct CardView: View {
     }
     private var cardTitle: String = ""
     private var cardSubTitle: String = ""
+    private var imageWidth: CGFloat = 150
     private var cardHeight: CGFloat = 225
     private var cornerRadius: CGFloat = 12
     
